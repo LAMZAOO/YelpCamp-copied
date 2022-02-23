@@ -21,7 +21,7 @@ router.post('/register', async (req, res, next) => {
     } catch (e) {
         req.flash('error', e.message);
         res.redirect('/register');
-    }
+        }
 });
 
 router.get('/login', (req, res) => {
