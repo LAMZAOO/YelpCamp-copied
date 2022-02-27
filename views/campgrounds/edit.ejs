@@ -1,8 +1,9 @@
 <% layout('layouts/boilerplate') %>
 <div class="row">
     <h1 class="text-center">キャンプ場の編集</h1>
-    <div class="offset-3 col-6">
-        <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST" novalidate class="validated-form">
+    <div class="offset-md-3 col-md-6">
+        <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST" novalidate class="validated-form"
+            enctype="multipart/form-data">
             <div class="mb-3">
             <label class="form-label" for="title">タイトル</label>
             <input class="form-control" type="text" name="campground[title]" id="title" value="<%= campground.title %>" required>
@@ -17,13 +18,7 @@
                 OK!
             </div>
             </div>
-            <div class="mb-3">
-                <label class="form-label" for="image">画像URL</label>
-                <input class="form-control" type="text" name="campground[image]" id="image" value="<%= campground.image %>" required>
-                <div class="valid-feedback">
-                    OK!
-                </div>
-            </div>
+
             <div class="mb-3">
                 <label class="form-label" for="price">価格</label>
                 <div class="input-group">
@@ -40,6 +35,19 @@
                 <div class="valid-feedback">
                     OK!
                 </div>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">画像の追加アップロード</label>
+                <input class="form-control" type="file" id="image" name="image" multiple>
+            </div>
+            <div class="mb-3">
+                <% campground.images.forEach(function(img, i) { %>
+                    <img src="<%= img.thumbnail %>" class="img-thumbnail" alt="">
+                    <div class="form-check-inline">
+                        <input type="checkbox" name="deleteImages[]" id="image-<%= i %>" value="<%= img.filename %>">
+                    </div>
+                    <label for="image-<%= i %>">削除する</label>
+                <% }) %>
             </div>
             <div class="mb-3">
                 <button class="btn-info">更新する</button>
