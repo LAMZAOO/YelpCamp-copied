@@ -15,15 +15,12 @@ const User = require('./models/user');
 const helmet = require('helmet');
 
 const mongoSanitize = require('express-mongo-sanitize');
+
 const userRoutes = require('./routes/users');
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 
-const MongoStore = require('connect-mongo');
-
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
-
-mongoose.connect(dburl,
+mongoose.connect('mongodb://localhost:27017/yelp-camp',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -51,24 +48,9 @@ app.use(mongoSanitize({
     replaceWith: '_',
 }));
 
-const secret = process.env.SECRET || 'mysecret';
-
-const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    crypto: {
-        secret
-    },
-    touchAfter: 24 * 3600 // time period in seconds
-});
-
-store.on('error', e => {
-    console.log('セッションストアエラー', e);
-});
-
 const sessionConfig = {
-    store,
     name: 'session',
-    secret,
+    secret: 'mysecret',
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -149,7 +131,6 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', { err });
 });
 
-const port = process.env.PORT || 3000
-app.listen(port, () => {
-    console.log(`ポート${port}でリクエスト待受中...`);
+app.listen(3000, () => {
+    console.log('ポート3000でリクエスト待受中...');
 });
